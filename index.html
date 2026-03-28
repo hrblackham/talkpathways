@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TALK: Transforming Articulation and Language for Kids</title>
+<meta name="description" content="TALK is developing a machine learning model for objective pediatric speech sound disorder identification, built by a clinician and grounded in research.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --N:#0B1320;
+  --N2:#40628b;
+  --O:#556B2F;
+  --O2:#6A8539;
+  --OL:#F0F3E8;
+  --C:#F7F6F2;
+  --W:#ffffff;
+  --T:#1A1D26;
+  --M:#626877;
+  --F:#9AA0AE;
+  --B:rgba(11,19,32,0.09);
+  --BL:rgba(11,19,32,0.05);
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);color:var(--T);background:var(--C);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{text-decoration:none;}
+img{max-width:100%;display:block;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;height:62px;background:rgba(247,246,242,0.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--B);display:flex;align-items:center;justify-content:space-between;padding:0 52px;}
+.nav-logo{display:flex;align-items:center;}
+.nav-logo img{height:28px;width:auto;}
+nav ul{list-style:none;display:flex;gap:28px;align-items:center;}
+nav ul a{font-size:13px;font-weight:400;color:var(--M);letter-spacing:0.1px;transition:color .15s;}
+nav ul a:hover{color:var(--N);}
+.nav-pill{background:var(--N);color:#fff !important;padding:8px 20px;border-radius:100px;font-size:12px;font-weight:500;letter-spacing:0.3px;transition:background .15s;}
+.nav-pill:hover{background:var(--N2) !important;}
+
+/* HERO */
+.hero{min-height:92vh;display:flex;align-items:center;justify-content:center;padding:80px 52px;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--B);}
+.hero-inner{max-width:1020px;width:100%;display:grid;grid-template-columns:2fr 1fr;align-items:stretch;gap:0;}.hero-left{max-width:580px;display:flex;flex-direction:column;justify-content:center;}
+.hero-logo-wrap{margin-bottom:52px;}
+.hero-logo-wrap img{height:56px;width:auto;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--O);margin-bottom:28px;font-family:var(--mono);}
+.hero-h1{font-family:var(--serif);font-size:clamp(44px,5.5vw,68px);line-height:1.05;color:var(--N);letter-spacing:-1px;margin-bottom:24px;font-weight:400;}
+.hero-h1 em{font-style:italic;color:var(--O);}
+.hero-p{font-size:16px;color:var(--M);line-height:1.8;max-width:480px;margin-bottom:40px;font-weight:300;}
+.hero-actions{display:flex;align-items:center;gap:20px;}
+.btn-primary{background:var(--N);color:#fff;padding:13px 28px;border-radius:100px;font-size:14px;font-weight:500;font-family:var(--sans);letter-spacing:0.2px;transition:background .15s;display:inline-block;}
+.btn-primary:hover{background:var(--N2);}
+.btn-ghost{font-size:13px;color:var(--M);display:flex;align-items:center;gap:6px;letter-spacing:0.1px;transition:color .15s;font-family:var(--sans);}
+.btn-ghost:hover{color:var(--N);}
+.btn-ghost::after{content:'↓';}
+.hero-right{display:flex;flex-direction:column;justify-content:space-between;padding-left:48px;border-left:1px solid var(--B);}
+.hero-stat{padding:0;}
+.hero-stat:not(:last-child){border-bottom:none;}
+.hero-stat-n{font-family:var(--serif);font-size:clamp(38px,4vw,54px);color:var(--O);font-weight:400;line-height:1;margin-bottom:8px;}
+.hero-stat-n em{font-style:italic;}
+.hero-stat-l{font-size:13px;color:var(--M);line-height:1.55;font-weight:300;max-width:240px;}
+
+/* TICKER */
+.ticker{border-top:1px solid var(--B);border-bottom:1px solid var(--B);overflow:hidden;padding:14px 0;background:var(--W);}
+.ticker-inner{display:flex;white-space:nowrap;animation:tick 32s linear infinite;}
+.ticker-item{font-size:12px;font-family:var(--mono);color:var(--F);letter-spacing:0.5px;padding:0 40px;border-right:1px solid var(--B);flex-shrink:0;}
+.ticker-item span{color:var(--O);margin-right:8px;}
+@keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* SHARED */
+section{padding:96px 52px;}
+.inner{max-width:1020px;margin:0 auto;}
+.inner-narrow{max-width:740px;margin:0 auto;}
+.label{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:block;font-family:var(--mono);}
+.label-olive{color:var(--O);}
+.label-fade{color:rgba(255,255,255,0.3);}
+h2.display{font-family:var(--serif);font-size:clamp(32px,4vw,50px);line-height:1.1;letter-spacing:-0.5px;margin-bottom:16px;font-weight:400;}
+.d-white{color:#fff;}
+.d-navy{color:var(--N);}
+
+/* MISSION */
+.mission-sec{background:var(--N);}
+.mission-intro{font-size:16px;color:rgba(255,255,255,0.72);max-width:560px;line-height:1.75;font-weight:300;margin-bottom:56px;}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden;}
+.pillar{background:var(--N);padding:36px 28px;transition:background .2s;}
+.pillar:hover{background:rgba(255,255,255,0.03);}
+.pillar-n{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:1px;margin-bottom:20px;display:block;}
+.pillar h3{font-family:var(--serif);font-size:22px;color:#fff;margin-bottom:12px;font-weight:400;line-height:1.25;}
+.pillar p{font-size:13.5px;color:rgba(255,255,255,0.72);line-height:1.7;font-weight:300;}
+
+/* VALIDATION */
+.validation-sec{background:var(--W);}
+.val-top{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--B);border-radius:12px;overflow:hidden;margin-top:52px;}
+.val-cell{background:var(--W);padding:36px 28px;}
+.val-u{font-family:var(--mono);font-size:11px;color:var(--O);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;display:block;}
+.val-n{font-family:var(--serif);font-size:54px;color:var(--O);line-height:1;margin-bottom:10px;font-weight:400;}
+.val-l{font-size:13px;color:var(--M);line-height:1.6;font-weight:300;}
+.pullquote{margin-top:40px;padding:36px 40px;border-left:2px solid var(--O);border-radius:0 10px 10px 0;background:var(--OL);}
+.pullquote q{font-family:var(--serif);font-size:20px;color:var(--N);line-height:1.6;font-style:italic;display:block;margin-bottom:12px;quotes:none;}
+.pullquote q::before{content:'\201C';}
+.pullquote q::after{content:'\201D';}
+.pullquote cite{font-size:12px;color:var(--M);font-style:normal;font-family:var(--mono);letter-spacing:0.5px;}
+
+/* PROBLEM */
+.problem-sec{background:var(--C);}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:52px;align-items:start;}
+.p-stat{padding:28px 0;border-bottom:1px solid var(--B);}
+.p-stat:first-child{padding-top:0;}
+.p-stat:last-child{border-bottom:none;}
+.p-stat-n{font-family:var(--serif);font-size:46px;color:var(--O);line-height:1;margin-bottom:8px;font-weight:400;}
+.p-stat-d{font-size:13px;color:var(--M);line-height:1.6;font-weight:300;}
+.problem-copy h3{font-family:var(--serif);font-size:28px;color:var(--N);margin-bottom:20px;font-weight:400;line-height:1.25;}
+.problem-copy p{font-size:15px;color:var(--M);line-height:1.8;margin-bottom:16px;font-weight:300;}
+
+/* RESEARCH */
+.research-sec{background:var(--W);}
+.research-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;margin-top:52px;}
+.research-copy h3{font-family:var(--serif);font-size:26px;color:var(--N);margin-bottom:18px;font-weight:400;line-height:1.25;}
+.research-copy p{font-size:15px;color:var(--M);line-height:1.8;margin-bottom:16px;font-weight:300;}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.checklist li{display:flex;align-items:flex-start;gap:12px;font-size:13.5px;color:var(--T);line-height:1.5;padding:13px 16px;background:var(--C);border:1px solid var(--B);border-radius:8px;}
+.chk{width:18px;height:18px;border-radius:50%;background:var(--O);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;}
+.chk svg{width:9px;height:9px;}
+
+/* FOUNDER */
+.founder-sec{background:var(--N);}
+.founder-layout{display:grid;grid-template-columns:260px 1fr;gap:64px;align-items:start;margin-top:52px;}
+.founder-left{position:sticky;top:80px;}
+.founder-img{width:220px;height:260px;border-radius:12px;overflow:hidden;margin-bottom:20px;background:rgba(255,255,255,0.05);}
+.founder-img img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.founder-name{font-family:var(--serif);font-size:26px;color:var(--W);margin-bottom:8px;font-weight:400;line-height:1.2;}
+.founder-creds{font-size:11.5px;color:var(--O);font-weight:500;font-family:var(--mono);line-height:1.9;letter-spacing:0.2px;}
+.founder-bio p{font-size:15px;color:rgba(255,255,255,0.72);line-height:1.85;margin-bottom:16px;font-weight:300;}
+.founder-bio p:first-child{font-size:17px;color:rgba(255,255,255,0.92);font-weight:400;line-height:1.7;}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:28px;}
+.chip{background:#ffffff;border:1px solid #ffffff;border-radius:100px;padding:6px 14px;font-size:11.5px;font-weight:500;color:#0B1320;font-family:var(--mono);letter-spacing:0.2px;}
+.timeline{display:flex;gap:0;margin-top:32px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.1);}
+.tl{flex:1;padding-right:16px;}
+.tl:not(:last-child){border-right:1px solid rgba(255,255,255,0.1);margin-right:16px;}
+.tl-y{font-family:var(--serif);font-size:24px;color:var(--O);font-weight:400;margin-bottom:4px;}
+.tl-d{font-size:12px;color:rgba(255,255,255,0.72);line-height:1.5;font-weight:400;}
+
+/* FAQ */
+.faq-sec{background:var(--C);}
+.faq-list{margin-top:48px;}
+.faq-item{border-top:1px solid var(--B);}
+.faq-item:last-child{border-bottom:1px solid var(--B);}
+.faq-q{width:100%;background:none;border:none;text-align:left;padding:22px 0;font-size:15px;font-weight:500;color:var(--N);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--sans);gap:20px;transition:color .15s;}
+.faq-q:hover{color:var(--O);}
+.faq-icon{width:22px;height:22px;border-radius:50%;border:1px solid var(--B);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;line-height:1;color:var(--O);transition:transform .25s,background .15s;font-family:var(--sans);}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--OL);}
+.faq-a{display:none;padding:0 0 22px;font-size:14.5px;color:var(--M);line-height:1.8;font-weight:300;max-width:720px;}
+.faq-item.open .faq-a{display:block;}
+
+/* CONTACT */
+.contact-sec{background:var(--N);padding:96px 52px;text-align:center;}
+.contact-h{font-family:var(--serif);font-size:clamp(36px,5vw,56px);color:#fff;font-weight:400;line-height:1.1;letter-spacing:-0.5px;margin-bottom:20px;}
+.contact-h em{font-style:italic;color:rgba(255,255,255,0.45);}
+.contact-p{font-size:16px;color:rgba(255,255,255,0.4);line-height:1.75;font-weight:300;margin-bottom:44px;max-width:480px;margin-left:auto;margin-right:auto;}
+.contact-email{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--N);padding:15px 36px;border-radius:100px;font-size:14px;font-weight:500;font-family:var(--sans);transition:opacity .15s;}
+.contact-email:hover{background:var(--N2);color:#fff;}.contact-email:hover svg rect,.contact-email:hover svg path{stroke:#fff;}
+
+/* FOOTER */
+footer{background:var(--N);border-top:1px solid rgba(255,255,255,0.06);padding:28px 52px;display:flex;align-items:center;justify-content:space-between;}
+footer img{height:20px;width:auto;opacity:0.4;}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.18);font-family:var(--mono);letter-spacing:0.3px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 24px;}
+  nav ul{gap:16px;}
+  nav ul li:not(:last-child){display:none;}
+  .hero{grid-template-columns:1fr;padding:60px 24px;min-height:auto;gap:40px;}
+  .hero-right{border-left:none;border-top:1px solid var(--B);padding-left:0;padding-top:20px;}
+  .hero::after{display:none;}
+  section{padding:64px 24px;}
+  .pillars{grid-template-columns:1fr;}
+  .val-top{grid-template-columns:1fr;}
+  .problem-grid{grid-template-columns:1fr;gap:40px;}
+  .research-layout{grid-template-columns:1fr;gap:40px;}
+  .founder-layout{grid-template-columns:1fr;gap:32px;}
+  .founder-left{position:static;}
+  footer{flex-direction:column;gap:12px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="https://raw.githubusercontent.com/hrblackham/talkpathways/main/full-logo-navy.png" alt="TALK">
+  </a>
+  <ul>
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#validation">Research</a></li>
+    <li><a href="#founder">About</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-pill">Get in touch</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+  <div class="hero-left">
+    <div class="hero-logo-wrap">
+      <img src="https://raw.githubusercontent.com/hrblackham/talkpathways/main/full-logo-navy.png" alt="TALK: Transforming Articulation and Language for Kids">
+    </div>
+    <div class="hero-eyebrow">SPEECH &middot; TECHNOLOGY &middot; EQUITY</div>
+    <h1 class="hero-h1">
+      Objective SSD<br>
+      identification for<br>
+      <em>every child.</em>
+    </h1>
+    <p class="hero-p">A machine learning model for pediatric speech sound disorder identification, built by a clinician, grounded in 54 SLP interviews, and designed for the real world.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Request a conversation</a>
+      <a href="#mission" class="btn-ghost">Learn more</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat">
+      <div class="hero-stat-n"><em>54</em></div>
+      <div class="hero-stat-l">SLP interviews conducted across every practice setting: school, clinic, hospital, and early intervention</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n"><em>7M+</em></div>
+      <div class="hero-stat-l">annual U.S. SSD evaluations, representing a $259 to $504M market with no objective acoustic tool</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-n"><em>Zero</em></div>
+      <div class="hero-stat-l">objective, acoustic-based SSD identification tools currently in clinical or school use</div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="ticker-item"><span>01</span>Speech sound disorders affect ~8% of U.S. children</div>
+    <div class="ticker-item"><span>02</span>107% increase in SSD diagnoses since 2020</div>
+    <div class="ticker-item"><span>03</span>27% of school SLPs considering leaving the field &middot; ASHA 2024</div>
+    <div class="ticker-item"><span>04</span>1 to 2 hours per evaluation, scored by hand</div>
+    <div class="ticker-item"><span>05</span>GFTA-3 normed on just 25 samples per age cell</div>
+    <div class="ticker-item"><span>06</span>LLC Est. 2023 &middot; Harvard-affiliated MS in SLP</div>
+    <div class="ticker-item"><span>01</span>Speech sound disorders affect ~8% of U.S. children</div>
+    <div class="ticker-item"><span>02</span>107% increase in SSD diagnoses since 2020</div>
+    <div class="ticker-item"><span>03</span>27% of school SLPs considering leaving the field &middot; ASHA 2024</div>
+    <div class="ticker-item"><span>04</span>1 to 2 hours per evaluation, scored by hand</div>
+    <div class="ticker-item"><span>05</span>GFTA-3 normed on just 25 samples per age cell</div>
+    <div class="ticker-item"><span>06</span>LLC Est. 2023 &middot; Harvard-affiliated MS in SLP</div>
+  </div>
+</div>
+
+<section class="mission-sec" id="mission">
+  <div class="inner">
+    <span class="label label-fade">Mission</span>
+    <h2 class="display d-white">Why TALK exists.</h2>
+    <p class="mission-intro">Speech sound disorders affect approximately 8% of children, yet diagnosis remains subjective, variable, and inequitably distributed. The tools are outdated. The burden falls on clinicians. The children bear the gap.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="pillar-n">01 ——</span>
+        <h3>Reduce evaluator variability</h3>
+        <p>SSD diagnosis varies across evaluators, settings, and experience levels. Acoustic-grounded analysis makes the outcome consistent, regardless of who performs the evaluation.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-n">02 ——</span>
+        <h3>Expand access to accurate diagnosis</h3>
+        <p>Children in under-resourced schools and underserved communities face the longest waitlists and the most inconsistent care. Objective tools change that calculus at scale.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-n">03 ——</span>
+        <h3>Advance the evidence base</h3>
+        <p>Research findings will be shared openly with the field. TALK is committed to contributing to, not just consuming from, the science of pediatric speech-language pathology.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="validation-sec" id="validation">
+  <div class="inner">
+    <span class="label label-olive">The numbers</span>
+    <h2 class="display d-navy">Need documented.<br>Gap confirmed.</h2>
+    <div class="val-top">
+      <div class="val-cell">
+        <span class="val-u">Prevalence</span>
+        <div class="val-n">~8%</div>
+        <div class="val-l">of U.S. children have a speech sound disorder, with diagnoses up 107% since 2020.</div>
+      </div>
+      <div class="val-cell">
+        <span class="val-u">Annual evaluations</span>
+        <div class="val-n">7M+</div>
+        <div class="val-l">SSD assessments conducted annually in the U.S., at $37 to $72 per evaluation, totaling a $259 to $504M annual market.</div>
+      </div>
+      <div class="val-cell">
+        <span class="val-u">Primary research</span>
+        <div class="val-n">54</div>
+        <div class="val-l">in-depth SLP interviews conducted across all practice settings, validating the problem and informing every product decision.</div>
+      </div>
+    </div>
+    <div class="pullquote">
+      <q>If this tool could squeeze time from 1.5 hours into 20 to 30 minutes, that would be helpful. I could spend that time somewhere else.</q>
+      <cite>School-based SLP, Jordan School District (primary research interview)</cite>
+    </div>
+  </div>
+</section>
+
+<section class="problem-sec" id="problem">
+  <div class="inner">
+    <span class="label label-olive">The problem</span>
+    <h2 class="display d-navy">Current tools are<br>incomplete by design.</h2>
+    <div class="problem-grid">
+      <div class="problem-stats">
+        <div class="p-stat">
+          <div class="p-stat-n">27%</div>
+          <div class="p-stat-d">of school-based SLPs are considering leaving the field. Burnout is the leading cause. Paperwork and manual scoring are the leading contributors. Source: ASHA 2024 Annual School Survey.</div>
+        </div>
+        <div class="p-stat">
+          <div class="p-stat-n">1 to 2 hrs</div>
+          <div class="p-stat-d">per child for evaluation and scoring, not including report writing, which can add another 45 to 90 minutes. Most SLPs report working unpaid overtime weekly to keep pace.</div>
+        </div>
+        <div class="p-stat">
+          <div class="p-stat-n">25</div>
+          <div class="p-stat-d">samples per age cell, the norm base for the GFTA-3, the current gold-standard assessment tool. Administered with pen and paper. Nearly every SLP interviewed described it as incomplete.</div>
+        </div>
+      </div>
+      <div class="problem-copy">
+        <h3>Clinical listening alone was never enough.</h3>
+        <p>Speech sound disorder identification is inherently subjective. Two trained clinicians can evaluate the same child and reach different conclusions. The GFTA-3, the dominant tool for decades, was normed on a small, homogeneous sample and requires manual elicitation, transcription, and analysis by hand.</p>
+        <p>Across 54 SLP interviews, the consistent finding: too much time on scoring, no objective verification, no automated pattern detection, and no clear path from evaluation data to diagnosis that does not run entirely through the clinician's judgment and memory.</p>
+        <p>TALK is building the missing infrastructure: an acoustic ML model that classifies speech sound errors objectively, acts as a second set of ears, and integrates into the workflows SLPs already use.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="research-sec" id="research">
+  <div class="inner">
+    <span class="label label-olive">The research</span>
+    <h2 class="display d-navy">Building the model.</h2>
+    <div class="research-layout">
+      <div class="research-copy">
+        <h3>A supervised ML approach to acoustic SSD identification</h3>
+        <p>TALK is developing a supervised machine learning model to identify acoustic markers associated with speech sound disorders in children. The model will be trained and validated on clinically annotated pediatric speech data, with the goal of producing a tool that integrates into existing SLP evaluation workflows.</p>
+        <p>Access to high-quality, annotated pediatric speech corpora is critical to this work. TALK is actively seeking research data partnerships with institutions whose existing datasets can help ground the model in clinically valid, diverse speech samples.</p>
+      </div>
+      <ul class="checklist">
+        <li><div class="chk"><svg viewBox="0 0 10 10" fill="none"><polyline points="2,5 4.5,7.5 8,3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Acoustic feature extraction from pediatric speech samples</span></li>
+        <li><div class="chk"><svg viewBox="0 0 10 10" fill="none"><polyline points="2,5 4.5,7.5 8,3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Supervised classification of speech sound error patterns</span></li>
+        <li><div class="chk"><svg viewBox="0 0 10 10" fill="none"><polyline points="2,5 4.5,7.5 8,3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Cross-evaluator validation and inter-rater reliability analysis</span></li>
+        <li><div class="chk"><svg viewBox="0 0 10 10" fill="none"><polyline points="2,5 4.5,7.5 8,3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Differentiation between disorder, difference, and typical variation</span></li>
+        <li><div class="chk"><svg viewBox="0 0 10 10" fill="none"><polyline points="2,5 4.5,7.5 8,3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Built by a CCC-SLP with direct clinical SSD evaluation experience</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="founder-sec" id="founder">
+  <div class="inner">
+    <span class="label label-fade">About the founder</span>
+    <h2 class="display d-white" style="white-space:nowrap;">Clinician. Technologist. Builder.</h2>
+    <div class="founder-layout">
+      <div class="founder-left">
+        <div class="founder-img">
+          <img src="https://raw.githubusercontent.com/hrblackham/talkpathways/main/headshot.JPG" alt="Heidi Blackham">
+        </div>
+        <div class="founder-name">Heidi Blackham</div>
+        <div class="founder-creds">MS &bull; CCC-SLP &bull; Engineering Program Manager &bull; Founder &amp; CEO</div>
+      </div>
+      <div class="founder-bio">
+        <p>I am a licensed, ASHA-certified speech-language pathologist with a master's degree from a Harvard-affiliated SLP program, and I have spent the last several years building the case that clinical rigor and technical ambition are not just compatible, they are the only combination that actually solves this problem.</p>
+        <p>The idea for TALK came while I was practicing in Boston, sitting across from children and their families in evaluation rooms, running pen-and-paper assessments that had not meaningfully changed in decades. I knew the tools were inadequate. I also knew that the data, the computing infrastructure, and the machine learning frameworks to do something about it all existed. They had simply never been brought together with genuine clinical depth.</p>
+        <p>Since forming TALK LLC in 2023, I have conducted 54 in-depth interviews with SLPs across every practice setting to validate the problem and inform the product. I have assembled an advisory team across machine learning, software development, business strategy, and clinical practice. I also serve as an engineering program manager at a national technology company, giving me direct experience leading complex software programs from concept to production.</p>
+        <p>What I am building is not a clinical decision-support chatbot. It is a validated acoustic ML model, built with the same rigor that SLPs apply to their evaluations, because anything less would not be worth building.</p>
+        <div class="chips">
+          <span class="chip">CCC-SLP</span>
+          <span class="chip">Harvard-affiliated MS</span>
+          <span class="chip">Pediatric SSD evaluation</span>
+          <span class="chip">Engineering PM</span>
+          <span class="chip">54 SLP interviews</span>
+          <span class="chip">ASHA member</span>
+          <span class="chip">Advisory team assembled</span>
+        </div>
+        <div class="timeline">
+          <div class="tl">
+            <div class="tl-y">2021</div>
+            <div class="tl-d">Idea born while practicing as an SLP in Boston</div>
+          </div>
+          <div class="tl">
+            <div class="tl-y">2023</div>
+            <div class="tl-d">TALK LLC formed; transitioned into tech</div>
+          </div>
+          <div class="tl">
+            <div class="tl-y">2025</div>
+            <div class="tl-d">54 interviews complete; advisory team assembled; data partnerships underway</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq-sec" id="faq">
+  <div class="inner-narrow">
+    <span class="label label-olive">FAQ</span>
+    <h2 class="display d-navy">Honest answers.</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">What is TALK building?<span class="faq-icon">+</span></button>
+        <div class="faq-a">TALK is developing a supervised machine learning model that uses acoustic analysis to identify speech sound disorders in children. The goal is an objective, data-grounded reference tool that supports speech-language pathologists during evaluation, reducing variability, saving time, and expanding access to consistent diagnosis.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Will the model try to replace clinical judgment?<span class="faq-icon">+</span></button>
+        <div class="faq-a">No. The model is designed as a clinical decision-support tool, not a replacement for the clinician. SSD identification is complex and context-dependent, and it involves nuance that only a trained SLP can fully evaluate. TALK's role is to make the acoustic analysis side of that evaluation objective and faster, so clinicians can spend more time where it matters most.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What are TALK's long-term research goals?<span class="faq-icon">+</span></button>
+        <div class="faq-a">The long-term vision is a validated, clinically integrated tool deployed across school-based and clinical settings, with published findings, open contributions to the research community, and expanded capabilities including differentiation between disorder and linguistic difference, multilingual populations, and sentence-level analysis.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Who is behind TALK?<span class="faq-icon">+</span></button>
+        <div class="faq-a">TALK was founded by Heidi Blackham, MS, CCC-SLP, a licensed speech-language pathologist with a master's degree from a Harvard-affiliated SLP program and a current role as an engineering program manager at a national technology company. TALK LLC was formally established in 2023. An advisory team with expertise across machine learning, software development, business strategy, and clinical practice supports the work.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-sec" id="contact">
+  <div class="inner-narrow">
+    <h2 class="contact-h">Let's talk about<br><em>the product.</em></h2>
+    <p class="contact-p">TALK welcomes conversations with university researchers, lab directors, and institutions interested in supporting the development of objective SSD identification tools.</p>
+    <a href="#" class="contact-email" id="contact-btn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#0B1320" stroke-width="1.3"/><path d="M1 5l7 5 7-5" stroke="#0B1320" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <span class="__cf_email__" data-cfemail="f9919c959596b98d98959289988d918e98808ad79a9694">[email&#160;protected]</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <img src="https://raw.githubusercontent.com/hrblackham/talkpathways/main/logo-white.png" alt="TALK">
+  <div class="footer-copy">&copy; 2025 TALK LLC &middot; Transforming Articulation and Language for Kids</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+  function init(){
+    // FAQ accordion
+    var btns = document.querySelectorAll('.faq-q');
+    for(var i=0;i<btns.length;i++){
+      btns[i].addEventListener('click', function(){
+        var item = this.parentElement;
+        var wasOpen = item.classList.contains('open');
+        var all = document.querySelectorAll('.faq-item');
+        for(var j=0;j<all.length;j++){ all[j].classList.remove('open'); }
+        if(!wasOpen){ item.classList.add('open'); }
+      });
+    }
+    // Set email href via JS so Cloudflare cannot obfuscate it
+    var btn = document.getElementById('contact-btn');
+    if(btn){
+      var u='hello';var d='talkpathways.com';
+      btn.href='mailto:'+u+'@'+d;
+    }
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',init);
+  } else { init(); }
+})();
+</script>
+</body>
+</html>
